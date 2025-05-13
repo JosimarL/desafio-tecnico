@@ -1,0 +1,46 @@
+<h2>Agendar Transferência</h2>
+
+<form #form="ngForm" (ngSubmit)="agendar()" novalidate>
+  <input [(ngModel)]="transferencia.contaOrigem" name="contaOrigem" placeholder="Conta Origem" required>
+  <input [(ngModel)]="transferencia.contaDestino" name="contaDestino" placeholder="Conta Destino" required>
+  <input [(ngModel)]="transferencia.valor" name="valor" type="number" placeholder="Valor" min="1" required>
+  <input [(ngModel)]="transferencia.dataTransferencia" name="dataTransferencia" type="date" required>
+  <button type="submit" [disabled]="!form.valid || carregando">
+      {{ carregando ? 'Aguarde...' : 'Agendar' }}
+  </button>
+</form>
+
+<div *ngIf="mensagemSucesso" style="color: green; margin-top: 10px;">
+  {{ mensagemSucesso }}
+</div>
+
+<div *ngIf="mensagemErro" style="color: red; margin-top: 10px;">
+  {{ mensagemErro }}
+</div>
+
+<hr>
+
+<h3>Extrato</h3>
+
+<table class="tabela-extrato" *ngIf="transferencias.length > 0">
+  <thead>
+    <tr>
+      <th>Conta Origem</th>
+      <th>Conta Destino</th>
+      <th>Valor (R$)</th>
+      <th>Data Transferência</th>
+      <th>Taxa (R$)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of transferencias">
+      <td>{{ t.contaOrigem }}</td>
+      <td>{{ t.contaDestino }}</td>
+      <td>{{ t.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+      <td>{{ t.dataTransferencia | date:'dd/MM/yyyy':'':'pt-BR' }}</td>
+      <td>{{ t.taxa  | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="transferencias.length === 0" style="text-align: center;">Nenhuma transferência encontrada.</p>
